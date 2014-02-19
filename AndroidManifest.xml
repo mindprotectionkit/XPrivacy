@@ -26,6 +26,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="biz.bokhorst.xprivacy.MANAGE_PACKAGES" />
     <uses-permission android:name="biz.bokhorst.xprivacy.pro.CHECK" />
+    <uses-permission android:name="cydia.permission.SUBSTRATE" />
 
     <application
         android:name="ApplicationEx"
@@ -44,6 +45,9 @@
         <meta-data
             android:name="xposeddescription"
             android:value="@string/app_description" />
+        <meta-data
+            android:name="com.saurik.substrate.main"
+            android:value=".Cydia" />
 
         <!-- Samsung multi window support -->
         <meta-data
