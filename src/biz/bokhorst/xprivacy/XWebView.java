@@ -7,8 +7,6 @@ import android.os.Binder;
 import android.util.Log;
 import android.webkit.WebView;
 
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-
 public class XWebView extends XHook {
 	private Methods mMethod;
 	private static final List<String> mWebSettings = new ArrayList<String>();
@@ -56,7 +54,7 @@ public class XWebView extends XHook {
 	}
 
 	@Override
-	protected void before(MethodHookParam param) throws Throwable {
+	protected void before(XParam param) throws Throwable {
 		if (mMethod == Methods.WebView || mMethod == Methods.getSettings) {
 			// Do nothing
 
@@ -66,7 +64,8 @@ public class XWebView extends XHook {
 				if (isRestrictedExtra(param, extra)) {
 					String ua = (String) PrivacyManager.getDefacedProp(Binder.getCallingUid(), "UA");
 					WebView webView = (WebView) param.thisObject;
-					webView.getSettings().setUserAgentString(ua);
+					if (webView.getSettings() != null)
+						webView.getSettings().setUserAgentString(ua);
 				}
 			}
 
@@ -75,14 +74,15 @@ public class XWebView extends XHook {
 	}
 
 	@Override
-	protected void after(MethodHookParam param) throws Throwable {
+	protected void after(XParam param) throws Throwable {
 		if (mMethod == Methods.WebView) {
 			if (param.args.length > 0 && param.thisObject instanceof WebView) {
 				int uid = Binder.getCallingUid();
 				if (getRestricted(uid)) {
 					String ua = (String) PrivacyManager.getDefacedProp(Binder.getCallingUid(), "UA");
 					WebView webView = (WebView) param.thisObject;
-					webView.getSettings().setUserAgentString(ua);
+					if (webView.getSettings() != null)
+						webView.getSettings().setUserAgentString(ua);
 				}
 			}
 
